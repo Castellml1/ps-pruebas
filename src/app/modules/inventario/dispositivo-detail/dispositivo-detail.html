@@ -1,0 +1,180 @@
+<div class="container">
+  <div class="container-form">
+    <div class="wizard-sidebar">
+      <h4>Consulta</h4>
+
+      <div class="wizard-step active">
+        <div class="step-icon">1</div>
+        <span>Dispositivo Tecnológico</span>
+      </div>
+    </div>
+
+    <div class="wizard-separator">
+      <div class="separator-line"></div>
+    </div>
+
+    <!-- Spinner que se muestra mientras cargan los datos -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    }
+
+    <!-- Contenido del formulario que se muestra cuando YA NO se están cargando los datos -->
+    @if (!isLoading) {
+    <div class="wizard-content">
+      <form
+        nz-form
+        [formGroup]="inventarioForm"
+        class="form-content"
+        nzLayout="vertical"
+      >
+        <div class="form-section">
+          <h1>Datos del Dispositivo</h1>
+          <div class="form-grid">
+            <!-- Tipo -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Tipo</nz-form-label>
+                <nz-form-control>
+                  <input nz-input [value]="tipoNombre" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Marca -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Marca</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="marca" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Modelo -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Modelo</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="modelo" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Número de Serie -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Número de Serie</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="numSerie" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- IMEI -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>IMEI</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="imei" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Proveedor -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Proveedor</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="proveedor" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Fecha de Compra -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Fecha de Compra</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    readonly
+                    formControlName="fechaCompra"
+                    [nzFormat]="'dd/MM/yyyy'"
+                    nzDisabled
+                    class="calendario-disable"
+                  >
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Fecha de Término de Garantía -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Término de Garantía</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    readonly
+                    formControlName="fechaTerminoGarantia"
+                    [nzFormat]="'dd/MM/yyyy'"
+                    nzDisabled
+                    class="calendario-disable"
+                  >
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Empleado Asignado -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Asignado a</nz-form-label>
+                <nz-form-control>
+                  <input nz-input [value]="empleadoNombre" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Fecha de Registro -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Fecha de registro</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    readonly
+                    formControlName="fechaRegistro"
+                    nzPlaceHolder="Selecciona la fecha de inicio"
+                    [nzFormat]="'dd/MM/yyyy'"
+                    nzDisabled
+                    class="calendario-disable"
+                  >
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Comentario -->
+          <div class="full-width-section">
+            <nz-form-item>
+              <nz-form-label>Comentario</nz-form-label>
+              <nz-form-control>
+                <textarea
+                  nz-input
+                  formControlName="comentarios"
+                  rows="2"
+                  readonly
+                ></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- Botón Regresar -->
+          <div class="btn-container">
+            <button
+              nz-button
+              nzType="default"
+              type="button"
+              class="btn-style"
+              (click)="regresar()"
+            >
+              Regresar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    }
+  </div>
+</div>

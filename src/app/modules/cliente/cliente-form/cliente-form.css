@@ -1,0 +1,54 @@
+/* Usamos la clase que definimos en el servicio del modal (`nzClassName: 'custom-modal'`) */
+::ng-deep .custom-modal .ant-modal-content {
+  border-radius: 8px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+::ng-deep .custom-modal .ant-modal-header {
+  background-color: #fffbe6; /* Un fondo amarillo claro para advertencia */
+  border-bottom: 1px solid #ffe58f;
+  border-radius: 8px 8px 0 0;
+}
+
+::ng-deep .custom-modal .ant-modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #faad14; /* Color del ícono de advertencia de Ant */
+}
+
+/* Estilo para el ícono de exclamación que Ant Design pone en los modales de confirmación */
+::ng-deep .custom-modal .ant-modal-confirm-title-icon {
+  color: #faad14;
+  font-size: 22px;
+}
+
+::ng-deep .custom-modal .ant-modal-body {
+  padding: 24px;
+}
+
+::ng-deep .custom-modal .ant-modal-confirm-content {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+  margin-top: 8px;
+}
+
+::ng-deep .custom-modal .ant-modal-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 10px 16px;
+}
+
+/* Estilos para los botones del footer */
+::ng-deep .custom-modal .ant-btn {
+  border-radius: 4px;
+}
+
+::ng-deep .custom-modal .ant-btn-primary.ant-btn-dangerous {
+  background-color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+::ng-deep .custom-modal .ant-btn-primary.ant-btn-dangerous:hover {
+  background-color: #ff7875;
+  border-color: #ff7875;
+}

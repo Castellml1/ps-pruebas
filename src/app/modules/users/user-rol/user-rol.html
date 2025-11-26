@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="container-form">
+    <!-- Spinner mientras carga -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large" [nzTip]="'Cargando roles...'"></nz-spin>
+    </div>
+    }
+
+    <div class="wizard-sidebar">
+      <h4>Asignar Roles</h4>
+      <div class="wizard-step active">
+        <div class="step-icon">1</div>
+        <span>Roles de usuario</span>
+      </div>
+    </div>
+
+    <div class="wizard-separator"><div class="separator-line"></div></div>
+
+    <div class="wizard-content">
+      <div class="form-content">
+        <div class="form-section">
+          <h1>Asignar roles a "{{ username }}"</h1>
+
+          <div class="roles-grid">
+            @for (role of roles; track role) {
+            <div class="role-item">
+              <label class="role-label">{{ role.name }}</label>
+              <nz-switch
+                [(ngModel)]="roleStates[role.name]"
+                [nzCheckedChildren]="''"
+                [nzUnCheckedChildren]="''"
+              ></nz-switch>
+            </div>
+            }
+          </div>
+
+          <!-- Botones Guardar / Cancelar -->
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              (click)="guardarRoles()"
+            >
+              Actualizar
+            </button>
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+/* Boton de Guardar, Aceptar, Actualizar, Agregar */
+
+.btn-style {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #28c76f !important;
+  border-color: #28c76f !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 16px 32px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  min-height: 44px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el cursor por encima */
+.btn-style:hover {
+  background: #23a862 !important;
+  border-color: #23a862 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 199, 111, 0.3) !important;
+}
+
+/* Efecto cuando el botón está enfocado (ej. con tab o click) */
+.btn-style:focus {
+  background: #23a862 !important;
+  border-color: #23a862 !important;
+  box-shadow: 0 4px 12px rgba(40, 199, 111, 0.3);
+}
+
+/* Botón Siguiente en azul */
+.btn-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #007bff !important; /* azul principal */
+  border-color: #007bff !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 16px 32px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  min-height: 44px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+.btn-next:hover {
+  background: #0069d9 !important; /* azul más oscuro */
+  border-color: #0069d9 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3) !important;
+}
+
+/* Focus */
+.btn-next:focus {
+  background: #0069d9 !important;
+  border-color: #0069d9 !important;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+
+/* Botón Regresar en tonos grises */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #f5f5f5 !important; /* color neutro para regresar */
+  border: 1px solid #ccc !important;
+  color: #333 !important;
+  border-radius: 10px !important;
+  padding: 16px 32px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  min-height: 44px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el cursor por encima */
+.btn-back:hover {
+  background: #e0e0e0 !important;
+  border-color: #bbb !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Efecto cuando el botón está enfocado */
+.btn-back:focus {
+  background: #e0e0e0 !important;
+  border-color: #bbb !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Botón Cancelar en tonos rojos */
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #d62828 !important; /* rojo principal */
+  border-color: #d62828 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 16px 32px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  min-height: 44px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+.btn-cancel:hover {
+  background: #b71c1c !important; /* rojo más oscuro */
+  border-color: #b71c1c !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(214, 40, 40, 0.3) !important;
+}
+
+/* Focus */
+.btn-cancel:focus {
+  background: #b71c1c !important;
+  border-color: #b71c1c !important;
+  box-shadow: 0 4px 12px rgba(214, 40, 40, 0.3);
+}

@@ -1,0 +1,39 @@
+<nz-header>
+  <div class="header-container">
+    <nz-icon
+      class="trigger"
+      [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+      (click)="onToggleSidebar()"
+    ></nz-icon>
+
+    <div class="header-actions">
+      <nz-icon
+        nzType="bell"
+        nzTheme="fill"
+        class="icon-bell"
+        title="Notificaciones"
+      ></nz-icon>
+      <a
+        nz-dropdown
+        [nzDropdownMenu]="userMenu"
+        nzPlacement="bottomRight"
+        class="user-dropdown"
+        (nzVisibleChange)="menuVisible = $event"
+      >
+        <nz-icon nzType="user" nzTheme="outline" class="icon-user"></nz-icon>
+        @if (!menuVisible) {
+        <nz-icon nzType="caret-down" nzTheme="outline" class="dropdown-arrow"></nz-icon>
+        } @else {
+        <nz-icon nzType="caret-up" nzTheme="outline" class="dropdown-arrow"></nz-icon>
+        }
+      </a>
+      <nz-dropdown-menu #userMenu="nzDropdownMenu">
+        <ul nz-menu class="custom-dropdown-menu">
+          <li nz-menu-item nzDisabled class="user-info">{{ userProfile?.firstName }} {{ userProfile?.lastName}} {{ segundoApellido }}</li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item (click)="logout()" class="logout">Cerrar sesión</li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </div>
+</nz-header>

@@ -1,0 +1,104 @@
+.header-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 8px;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #808080;
+}
+
+.header-actions {
+  margin-left: auto;
+  margin-right: 2px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.user-dropdown:hover {
+  background-color: #f5f5f5;
+}
+
+/* Estilos para el dropdown personalizado */
+.custom-dropdown-menu {
+  background-color: #E3F3F1 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(42, 55, 74, 0.15) !important;
+  border: 1px solid rgba(65, 187, 214, 0.2) !important;
+}
+
+.custom-dropdown-menu .ant-dropdown-menu-item {
+  padding: 8px 16px !important;
+  transition: background-color 0.2s !important;
+}
+
+.custom-dropdown-menu .ant-dropdown-menu-item:hover {
+  background-color: rgba(65, 187, 214, 0.1) !important;
+}
+
+.logout {
+  color: #2A374A !important;
+  font-weight: 500;
+}
+
+.logout:hover {
+  background-color: rgba(65, 187, 214, 0.2) !important;
+  color: #2A374A !important;
+}
+
+.user-info {
+  cursor: default !important;
+  opacity: 1 !important;
+  color: #2A374A !important;
+  background-color: transparent !important;
+  font-weight: 600 !important;
+}
+
+.user-info:hover {
+  background-color: transparent !important;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  color: #000;
+  transition: transform 0.3s;
+}
+
+.icon-bell {
+  font-size: 16px;
+  color: #000;
+}
+
+.icon-bell:hover {
+  color: #808080;
+}
+
+.icon-user {
+  font-size: 16px;
+  color: #000;
+}
+
+nz-header {
+  background: #fff;
+  padding: 0;
+}

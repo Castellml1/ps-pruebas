@@ -1,0 +1,689 @@
+<div class="container">
+  <div class="container-form">
+    <div class="wizard-sidebar">
+      <h4>Detalle de Cliente</h4>
+      @for (step of stepsHabilitados; track step; let i = $index) {
+      <div
+        class="wizard-step"
+        [class.active]="currentStep === i"
+        (click)="showStep(i)"
+      >
+        <div class="step-icon">{{ i + 1 }}</div>
+        <span>{{ step }}</span>
+      </div>
+      }
+    </div>
+
+    <div class="wizard-separator">
+      <div class="separator-line"></div>
+    </div>
+
+    <!-- Spinner que se muestra mientras cargan los datos -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    }
+
+    <div class="wizard-content">
+      <form
+        nz-form
+        [formGroup]="formularioCliente"
+        class="form-content"
+        nzLayout="vertical"
+      >
+        <!-- Información Personal -->
+        @if (currentStep === 0) {
+        <div class="form-section">
+          <h1>Información Personal</h1>
+          <div class="form-grid">
+            <div class="form-item">
+            <nz-form-item>
+              <nz-form-label>Número cliente</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="id" readonly readonly />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Tipo</nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    formControlName="tipo"
+                    nzPlaceHolder="Tipo de cliente"
+                    nzDisabled
+                  >
+                    @for (t of tipoCliente; track t) {
+                    <nz-option
+                      [nzValue]="t.id"
+                      [nzLabel]="t.tipo_cliente"
+                    ></nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Giro</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="idGiro"
+                    [value]="getNombreGiro(formularioCliente.get('idGiro')?.value)"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Campos para Persona Física -->
+            @if (!esEmpresa) {
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Nombre</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="nombre" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Primer Apellido</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="primerApellido" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Segundo Apellido</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="segundoApellido" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            }
+
+            <!-- Campos para Empresa -->
+            @if (esEmpresa) {
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Nombre Comercial</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="nombreComercial" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Razón Social</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="razonSocial" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            }
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>RFC</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="rfc" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Contacto -->
+        @if (currentStep === 1) {
+        <div class="form-section">
+          <h1>Datos de Contacto</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Nombre</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="nombreContacto" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Apellidos</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="apellidosContacto"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="telefonoContacto" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono Adicional</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="telefonoAdicionalContacto"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Correo Electrónico</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="correoContacto" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Domicilio -->
+        @if (currentStep === 2) {
+        <div class="form-section">
+          <h1>Domicilio</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Calle y Número</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="calleNumero" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Código Postal</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="codigoPostal" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Colonia</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="colonia" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Entidad Federativa</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="entidadFederativa"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Municipio</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="municipio" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Domicilio Fiscal -->
+        @if (currentStep === 3){
+        <div class="form-section">
+          <h1>Domicilio Fiscal</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Calle y Número</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="calleNumeroFiscal"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Código Postal</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="codigoPostalFiscal"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Colonia</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="coloniaFiscal" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Entidad Federativa</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="entidadFederativaFiscal"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Municipio</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="municipioFiscal" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Representante Legal (Solo para empresas) -->
+        @if (esEmpresa && currentStep === 4) {
+        <div class="form-section">
+          <h1>Representante Legal</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Nombre</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="nombreRepresentante"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Primer Apellido</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="primerApellidoRepresentante"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Segundo Apellido</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="segundoApellidoRepresentante"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono Móvil</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="telefonoMovilRepresentante"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono Oficina</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="telefonoOficinaRepresentante"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Extensión Oficina</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="extensionOficinaRepresentante"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Correo</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="correoRepresentante"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Sucursales (Solo para empresas) -->
+        @if (esEmpresa && currentStep === 5) {
+        <div class="form-section">
+          <h1>{{ mostrarFormularioSucursal ? 'Detalle de Sucursal' : 'Sucursales' }}</h1>
+          @if (!mostrarFormularioSucursal) {
+          <div class="responsive-table" style="margin-top: 1rem">
+            <nz-table
+              #sucursalTable
+              [nzData]="listOfDisplayDataSucursales"
+              [nzBordered]="false"
+              [nzSize]="'middle'"
+              [nzPageSize]="pageSizeSucursal"
+              [nzShowSizeChanger]="true"
+              [nzPageSizeOptions]="[5, 10, 20, 50]"
+              [nzTotal]="totalSucursales"
+              [nzShowPagination]="true"
+              (nzPageSizeChange)="onPageSizeChangeSucursal($event)"
+              (nzPageIndexChange)="onPageIndexChangeSucursal($event)"
+              [nzNoResult]="customEmptySucursal"
+            >
+              <thead>
+                <tr class="cabecera-tabla">
+                  <th
+                    nzCustomFilter
+                    [nzSortFn]="compareSucursalNombre"
+                    [nzSortPriority]="1"
+                  >
+                    Nombre
+                    <nz-filter-trigger
+                      [(nzVisible)]="visibleSucursal"
+                      [nzActive]="searchValueSucursal.length > 0"
+                      [nzDropdownMenu]="menuSucursal"
+                    >
+                      <span nz-icon nzType="search"></span>
+                    </nz-filter-trigger>
+                  </th>
+                  <th nzCustomFilter>
+                    Calle
+                    <nz-filter-trigger
+                      [(nzVisible)]="visibleSucursalCalle"
+                      [nzActive]="searchValueSucursalCalle.length > 0"
+                      [nzDropdownMenu]="menuSucursalCalle"
+                    >
+                      <span nz-icon nzType="search"></span>
+                    </nz-filter-trigger>
+                  </th>
+                  <th>Colonia</th>
+                  <th>Municipio</th>
+                  <th>Entidad</th>
+                  <th>CP</th>
+                  <th nzCustomFilter>
+                    Encargado
+                    <nz-filter-trigger
+                      [(nzVisible)]="visibleSucursalEncargado"
+                      [nzActive]="searchValueSucursalEncargado.length > 0"
+                      [nzDropdownMenu]="menuSucursalEncargado"
+                    >
+                      <span nz-icon nzType="search"></span>
+                    </nz-filter-trigger>
+                  </th>
+                  <th nzCustomFilter>
+                    Teléfono
+                    <nz-filter-trigger
+                      [(nzVisible)]="visibleSucursalTelefono"
+                      [nzActive]="searchValueSucursalTelefono.length > 0"
+                      [nzDropdownMenu]="menuSucursalTelefono"
+                    >
+                      <span nz-icon nzType="search"></span>
+                    </nz-filter-trigger>
+                  </th>
+                  <th style="width: 100px">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (sucursal of sucursalTable.data; track sucursal) {
+                <tr>
+                  <td>{{ sucursal.nombreSucursal }}</td>
+                  <td>{{ sucursal.calleSucursal }}</td>
+                  <td>{{ sucursal.coloniaSucursal || '' }}</td>
+                  <td>{{ sucursal.municipioSucursal }}</td>
+                  <td>{{ sucursal.entidadFederativaSucursal }}</td>
+                  <td>{{ sucursal.codigoPostalSucursal }}</td>
+                  <td>{{ sucursal.personaEncargadaSucursal }}</td>
+                  <td>{{ sucursal.telefonoSucursal | phone }}</td>
+                  <td>
+                    <div class="btn-containerTablas" style="display: flex; justify-content: center;">
+                      <button
+                        class="icon-ver"
+                        nz-button
+                        nzType="link"
+                        nzSize="small"
+                        (click)="onVerSucursal(sucursal)"
+                        title="Ver"
+                      >
+                        <span nz-icon nzType="eye"></span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </nz-table>
+
+            <!-- Template para tabla vacía -->
+            <ng-template #customEmptySucursal>
+              <nz-empty
+                nzNotFoundImage="simple"
+                nzNotFoundContent="No se encontraron sucursales"
+              ></nz-empty>
+            </ng-template>
+
+            <!-- Dropdown del buscador para nombre de sucursal -->
+            <nz-dropdown-menu #menuSucursal="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    nz-input
+                    placeholder="Buscar por nombre"
+                    [value]="searchValueSucursal"
+                    (input)="onSearchInputSucursal($event)"
+                  />
+                </div>
+              </div>
+            </nz-dropdown-menu>
+
+            <!-- Dropdown del buscador para calle -->
+            <nz-dropdown-menu #menuSucursalCalle="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    nz-input
+                    placeholder="Buscar por calle"
+                    [value]="searchValueSucursalCalle"
+                    (input)="onSearchInputSucursalCalle($event)"
+                  />
+                </div>
+              </div>
+            </nz-dropdown-menu>
+
+            <!-- Dropdown del buscador para encargado -->
+            <nz-dropdown-menu #menuSucursalEncargado="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    nz-input
+                    placeholder="Buscar por encargado"
+                    [value]="searchValueSucursalEncargado"
+                    (input)="onSearchInputSucursalEncargado($event)"
+                  />
+                </div>
+              </div>
+            </nz-dropdown-menu>
+
+            <!-- Dropdown del buscador para teléfono -->
+            <nz-dropdown-menu #menuSucursalTelefono="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    nz-input
+                    placeholder="Buscar por teléfono"
+                    [value]="searchValueSucursalTelefono"
+                    (input)="onSearchInputSucursalTelefono($event)"
+                  />
+                </div>
+              </div>
+            </nz-dropdown-menu>
+          </div>
+          } @else {
+            <form nz-form [formGroup]="formularioSucursal" nzLayout="vertical">
+              <div class="form-grid">
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Nombre</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="nombreSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Calle y Número</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="calleSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Colonia</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="coloniaSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Código Postal</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="codigoPostalSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Entidad Federativa</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="entidadFederativaSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Municipio</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="municipioSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Persona Encargada</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="personaEncargadaSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="form-item">
+                  <nz-form-item>
+                    <nz-form-label>Teléfono</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="telefonoSucursal" readonly />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+              <div class="btn-container">
+                <button
+                  nz-button
+                  nzType="default"
+                  type="button"
+                  class="btn-style"
+                  (click)="cerrarDetalleSucursal()"
+                >
+                  Volver a la tabla
+                </button>
+              </div>
+            </form>
+          }
+        </div>
+        }
+
+        <!-- Botón Regresar -->
+        @if (!mostrarFormularioSucursal) {
+          <div class="btn-container">
+            <button
+              nz-button
+              nzType="default"
+              type="button"
+              class="btn-style"
+              (click)="regresar()"
+            >
+              Regresar
+            </button>
+          </div>
+        }
+      </form>
+    </div>
+  </div>
+</div>

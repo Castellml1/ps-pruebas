@@ -1,0 +1,30 @@
+.logo {
+  height: 64px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2a374a;
+  position: relative;
+}
+
+.logo img {
+  position: absolute;
+  max-height: 60px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.logo-large {
+  opacity: 1;
+}
+
+.logo-small {
+  opacity: 0;
+  max-width: 28px;
+}
+
+[nz-sider].ant-layout-sider-collapsed .logo {
+  padding: 16px 8px;
+}

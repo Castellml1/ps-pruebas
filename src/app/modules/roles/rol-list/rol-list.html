@@ -1,0 +1,77 @@
+<div class="container">
+  @if (showSuccessAlert) {
+  <div class="alert-fixed">
+    <nz-alert
+      nzType="success"
+      nzMessage="Rol guardado correctamente"
+      nzShowIcon
+    ></nz-alert>
+  </div>
+  }
+  <div class="container-list">
+    <div class="header-section">
+      <h1>Roles</h1>
+      <button
+        class="btn-style"
+        nz-button
+        nzType="primary"
+        (click)="onAgregarRol()"
+      >
+        Agregar
+      </button>
+    </div>
+
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    } @if (!isLoading) {
+    <div class="responsive-table">
+      <nz-table
+        #roleTable
+        [nzData]="listOfRoles"
+        [nzBordered]="false"
+        [nzSize]="'middle'"
+        [nzPageSize]="10"
+        [nzShowSizeChanger]="true"
+        [nzPageSizeOptions]="[5, 10, 20, 50]"
+        [nzShowPagination]="true"
+        [nzNoResult]="customEmpty"
+      >
+        <thead>
+          <tr class="cabecera-tabla">
+            <th>Rol</th>
+            <th>Descripción</th>
+          <!--  <th style="width: 120px" nzAlign="center">Acciones</th> -->
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (data of roleTable.data; track data.name) { 
+          <tr>
+            <td>{{ data.name }}</td>
+            <td>{{ data.description  }}</td> 
+          <!--  <td nzAlign="center">
+              <button 
+                nz-button 
+                nzType="link" 
+                nzSize="small" 
+                title="Editar Rol"
+              >
+                <span nz-icon nzType="edit"></span>
+              </button>
+            </td>
+            -->
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+
+      <ng-template #customEmpty>
+        <nz-empty nzNotFoundImage="simple" nzNotFoundContent="No se lograron encontrar roles">
+        </nz-empty>
+      </ng-template>
+    </div>
+    }
+  </div>
+</div>

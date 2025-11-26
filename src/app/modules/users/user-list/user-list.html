@@ -1,0 +1,136 @@
+<div class="container">
+  @if (showSuccessAlert) {
+  <div class="alert-fixed">
+    <nz-alert
+      nzType="success"
+      nzMessage="Usuario guardado correctamente"
+      nzShowIcon
+    ></nz-alert>
+  </div>
+  }
+
+  <div class="container-list">
+    <div class="header-section">
+      <h1>Usuarios</h1>
+      <button
+        class="btn-style"
+        nz-button
+        nzType="primary"
+        (click)="onAgregarUsuario()"
+      >
+        Agregar
+      </button>
+    </div>
+
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    } @if (!isLoading) {
+    <div class="responsive-table">
+      <nz-table
+        #userTable
+        [nzData]="listOfDisplayUsers"
+        [nzBordered]="false"
+        [nzSize]="'middle'"
+        [nzPageSize]="10"
+        [nzShowSizeChanger]="true"
+        [nzPageSizeOptions]="[5, 10, 20, 50]"
+        [nzShowPagination]="true"
+        [nzNoResult]="customEmpty"
+      >
+        <thead>
+          <tr class="cabecera-tabla">
+            <th
+              nzCustomFilter
+              nzColumnKey="username"
+              [nzSortFn]="true"
+              style="width: 180px"
+            >
+              Usuario
+              <nz-filter-trigger
+                [nzActive]="searchValue.length > 0"
+                [nzDropdownMenu]="menu"
+              >
+                <span nz-icon nzType="search"></span>
+              </nz-filter-trigger>
+            </th>
+            <th>Correo Electrónico</th>
+            <th>Nombre Completo</th>
+            <th>Roles</th>
+            <th nzAlign="center">Estatus</th>
+            <th style="width: 100px" nzAlign="center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (data of userTable.data; track data.username) {
+          <tr>
+            <td>{{ data.username }}</td>
+            <td>{{ data.email }}</td>
+            <td>
+              {{ data.firstName }} {{ data.lastName }} {{ data.segundoApellido
+              }}
+            </td>
+            <td>{{ getRoles(data) }}</td>
+            <td nzAlign="center">
+              <nz-switch
+                [ngModel]="data.estatus"
+                [nzDisabled]="true"
+                [title]="data.estatus ? 'Habilitado' : 'Deshabilitado'"
+              ></nz-switch>
+            </td>
+            <td nzAlign="center">
+              <div class="btn-containerTablas">
+                <button
+                  class="icon-rol"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  (click)="editRoles(data)"
+                  title="Editar Roles"
+                >
+                  <span nz-icon nzType="security-scan"></span>
+                </button>
+                <button
+                  class="icon-editar"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  (click)="editProfile(data)"
+                  title="Editar Perfil"
+                >
+                  <span nz-icon nzType="edit"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+
+      <ng-template #customEmpty>
+        <nz-empty
+          nzNotFoundImage="simple"
+          nzNotFoundContent="No se lograron encontrar usuarios"
+        >
+        </nz-empty>
+      </ng-template>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <input
+              type="text"
+              nz-input
+              placeholder="Buscar usuario"
+              [(ngModel)]="searchValue"
+              (ngModelChange)="search()"
+            />
+          </div>
+        </div>
+      </nz-dropdown-menu>
+    </div>
+    }
+  </div>
+</div>

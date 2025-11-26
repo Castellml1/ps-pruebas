@@ -1,0 +1,154 @@
+<div class="container">
+  @if (showSuccessAlert) {
+  <div class="alert-fixed">
+    <nz-alert
+      nzType="success"
+      nzMessage="Dispositivo guardado correctamente"
+      nzShowIcon
+    ></nz-alert>
+  </div>
+  }
+  <div class="container-list">
+    <div class="header-section">
+      <h1>Dispositivos electrónicos</h1>
+      @if (canAddDispositivo) {
+        <button
+          class="btn-style"
+          nz-button
+          nzType="primary"
+          (click)="onAgregar()"
+        >
+          Agregar
+        </button>
+      }
+    </div>
+
+    <!-- Spinner que se muestra mientras cargan los datos -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    } @if (!isLoading) {
+    <div class="responsive-table">
+      <nz-table
+        #deviceTable
+        [nzData]="listOfDisplayData"
+        [nzBordered]="false"
+        [nzSize]="'middle'"
+        [nzPageSize]="10"
+        [nzShowSizeChanger]="true"
+        [nzPageSizeOptions]="[5, 10, 20, 50]"
+        [nzShowPagination]="true"
+        [nzNoResult]="customEmpty"
+      >
+        <thead>
+          <tr class="cabecera-tabla">
+            <th nzCustomFilter [nzSortFn]="compararMarca" [nzSortPriority]="2" style="width: 180px">
+              Marca
+              <nz-filter-trigger
+                [(nzVisible)]="visibleMarca"
+                [nzActive]="searchValueMarca.length > 0"
+                [nzDropdownMenu]="menuMarca"
+              >
+                <span nz-icon nzType="search"></span>
+              </nz-filter-trigger>
+            </th>
+
+            <th>Modelo</th>
+            <th>Tipo</th>
+            <th>No. Serie</th>
+            <th>IMEI</th>
+            <th
+              nzCustomFilter
+              [nzSortFn]="compararAsignadoA"
+              [nzSortPriority]="1"
+            >
+              Asignado a
+              <nz-filter-trigger
+                [(nzVisible)]="visibleAsignado"
+                [nzActive]="searchValueAsignado.length > 0"
+                [nzDropdownMenu]="menuAsignado"
+              >
+                <span nz-icon nzType="search"></span>
+              </nz-filter-trigger>
+            </th>
+
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (dispositivo of deviceTable.data; track dispositivo) {
+          <tr>
+            <td>{{ dispositivo.marca }}</td>
+            <td>{{ dispositivo.modelo }}</td>
+            <td>{{ dispositivo.nombreTipo }}</td>
+            <td>{{ dispositivo.numSerie || '' }}</td>
+            <td>{{ dispositivo.imei || '' }}</td>
+            <td>{{ dispositivo.asignadoA }}</td>
+            <td>
+              <div class="btn-containerTablas">
+                <button
+                  class="icon-ver"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  (click)="onVer(dispositivo)"
+                >
+                  <span nz-icon nzType="eye"></span>
+                </button>
+                @if (canUpdateDispositivo) {
+                  <button
+                    class="icon-editar"
+                    nz-button
+                    nzType="link"
+                    nzSize="small"
+                    (click)="onEditar(dispositivo)"
+                  >
+                    <span nz-icon nzType="edit"></span>
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+
+      <ng-template #customEmpty>
+        <nz-empty
+          nzNotFoundImage="simple"
+          nzNotFoundContent="No se lograron encontrar dispositivos"
+        >
+        </nz-empty>
+      </ng-template>
+
+      <!-- Dropdown del buscador para Marca -->
+      <nz-dropdown-menu #menuMarca="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <input
+            type="text"
+            nz-input
+            placeholder="Buscar por marca"
+            [(ngModel)]="searchValueMarca"
+            (ngModelChange)="onSearch()"
+          />
+        </div>
+      </nz-dropdown-menu>
+
+      <!-- Dropdown del buscador para Asignado A -->
+      <nz-dropdown-menu #menuAsignado="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <input
+            type="text"
+            nz-input
+            placeholder="Buscar por asignado a"
+            [(ngModel)]="searchValueAsignado"
+            (ngModelChange)="onSearch()"
+          />
+        </div>
+      </nz-dropdown-menu>
+
+    </div>
+    }
+  </div>
+</div>

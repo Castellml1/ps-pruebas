@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="container-form">
+    <!-- Spinner mientras carga o guarda -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin
+        nzSimple
+        nzSize="large"
+        nzTip="Guardando rol..."
+      ></nz-spin>
+    </div>
+    }
+
+    <div class="wizard-sidebar">
+      <h4>Registrar Rol</h4>
+      <div class="wizard-step active">
+        <div class="step-icon">1</div>
+        <span>Datos generales</span>
+      </div>
+    </div>
+
+    <div class="wizard-separator"><div class="separator-line"></div></div>
+
+    <div class="wizard-content">
+      <form
+        [formGroup]="rolForm"
+        (ngSubmit)="guardarRol()"
+        nz-form
+        nzLayout="vertical"
+        class="form-content"
+      >
+        <div class="form-section">
+          <h1>Datos del Rol</h1>
+          <div class="form-grid-rol">
+            <!-- Nombre -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Nombre<span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('name')"
+                  [nzErrorTip]="nameErrorTpl"
+                >
+                  <input
+                    nz-input
+                    formControlName="name"
+                    placeholder="Ingresa el nombre del rol"
+                    maxlength="50"
+                  />
+                  <ng-template #nameErrorTpl let-control>
+                    @for (error of getFieldErrors('name'); track error) {
+                    <div class="ant-form-item-explain-error">{{ error }}</div>
+                    }
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-item form-item-full-width">
+              <nz-form-item>
+                <nz-form-label>Descripción</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('description')"
+                  [nzErrorTip]="descriptionErrorTpl"
+                >
+                  <textarea
+                    nz-input
+                    formControlName="description"
+                    placeholder="Ingresa la descripción del rol"
+                    maxlength="250"
+                    [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                  ></textarea>
+                  <ng-template #descriptionErrorTpl let-control>
+                    @for (error of getFieldErrors('description'); track error) {
+                    <div class="ant-form-item-explain-error">{{ error }}</div>
+                    }
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Botones Guardar / Cancelar -->
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              htmlType="submit"
+              [nzLoading]="isLoading"
+            >
+            Guardar
+            </button>
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+              [disabled]="isLoading"
+            >
+              Regresar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

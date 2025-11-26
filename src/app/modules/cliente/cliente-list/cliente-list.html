@@ -1,0 +1,170 @@
+<div class="container">
+  <div class="container-list">
+    <div class="header-section">
+      <h1>Clientes</h1>
+      @if (canAddClient) {
+      <button
+        class="btn-style"
+        nz-button
+        nzType="primary"
+        (click)="onAgregar()"
+      >
+        Agregar
+      </button>
+      }
+    </div>
+
+    <!-- Spinner mientras carga -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    } @if (!isLoading) {
+    <div class="responsive-table">
+      <nz-table
+        #clienteTable
+        [nzData]="listOfDisplayData"
+        [nzBordered]="false"
+        [nzSize]="'middle'"
+        [nzPageSize]="10"
+        [nzShowSizeChanger]="true"
+        [nzPageSizeOptions]="[5, 10, 20, 50]"
+        [nzShowPagination]="true"
+        [nzNoResult]="customEmpty"
+      >
+        <thead>
+          <tr class="cabecera-tabla">
+            <th nzCustomFilter style="width: 150px">
+              Cliente N.º
+              <!-- PREGUNTAR A PREDRO SI SEPUEDE COLOCAR ASÍ -->
+              <nz-filter-trigger
+                [(nzVisible)]="visibleId"
+                [nzActive]="searchValueId.length > 0"
+                [nzDropdownMenu]="menuId"
+              >
+                <span nz-icon nzType="search"></span>
+              </nz-filter-trigger>
+            </th>
+            <th
+              nzCustomFilter
+              [nzSortFn]="compareNombre"
+              [nzSortPriority]="3"
+              style="width: 180px"
+            >
+              Nombre
+              <nz-filter-trigger
+                [(nzVisible)]="visibleNombre"
+                [nzActive]="searchValueNombre.length > 0"
+                [nzDropdownMenu]="menuNombre"
+              >
+                <span nz-icon nzType="search"></span>
+              </nz-filter-trigger>
+            </th>
+            <th>Tipo</th>
+            <th>Teléfono</th>
+            <th>Domicilio</th>
+            <th style="width: 100px">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cliente of clienteTable.data; track cliente) {
+          <tr>
+            <td>{{ cliente?.id }}</td>
+            <td>
+              {{ cliente?.tipo === 'F' ? ((cliente?.nombre ?? '') + ' ' +
+              (cliente?.primerApellido ?? '')) : cliente?.nombreComercial }}
+            </td>
+
+            <td>
+              {{ cliente?.tipo === 'F' ? (cliente?.tipo + 'ísica'):
+              cliente?.tipo + 'oral' }}
+            </td>
+
+            <td>
+              @if (cliente.contacto?.telefono) {
+              <span> {{ (cliente.contacto?.telefono ?? '') | phone }} </span>
+              } @else { Sin teléfono }
+            </td>
+
+            <td>
+              @if (cliente.domicilio) { {{ cliente.domicilio.calleNumero || ''
+              }} @if(cliente.domicilio.calleNumero &&
+              cliente.domicilio.colonia){, } {{ cliente.domicilio.colonia || ''
+              }} @if(cliente.domicilio.colonia && cliente.domicilio.municipio){,
+              } {{ cliente.domicilio.municipio || '' }}
+              @if(cliente.domicilio.municipio &&
+              cliente.domicilio.entidadFederativa){, } {{
+              cliente.domicilio.entidadFederativa || '' }} }
+            </td>
+
+            <td>
+              <div class="btn-containerTablas">
+                <button
+                  class="icon-ver"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  (click)="onVer(cliente)"
+                  title="Ver"
+                >
+                  <span nz-icon nzType="eye"></span>
+                </button>
+                @if(canUpdateClient){
+                  <button
+                    class="icon-editar"
+                    nz-button
+                    nzType="link"
+                    nzSize="small"
+                    (click)="onEditar(cliente)"
+                    title="Editar"
+                  >
+                    <span nz-icon nzType="edit"></span>
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+
+      <ng-template #customEmpty>
+        <nz-empty
+          nzNotFoundImage="simple"
+          nzNotFoundContent="No se lograron encontrar clientes"
+        ></nz-empty>
+      </ng-template>
+
+      <!-- Dropdown del buscador con búsqueda en tiempo real -->
+      <nz-dropdown-menu #menuNombre="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <input
+              type="text"
+              nz-input
+              placeholder="Buscar por nombre"
+              [(ngModel)]="searchValueNombre"
+              (ngModelChange)="onSearch()"
+            />
+          </div>
+        </div>
+      </nz-dropdown-menu>
+
+      <!-- Dropdown del buscador para Número de Cliente -->
+      <nz-dropdown-menu #menuId="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <input
+              type="text"
+              nz-input
+              placeholder="Buscar por número"
+              [(ngModel)]="searchValueId"
+              (ngModelChange)="onSearch()"
+            />
+          </div>
+        </div>
+      </nz-dropdown-menu>
+    </div>
+    }
+  </div>
+</div>

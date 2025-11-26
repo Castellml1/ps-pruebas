@@ -1,0 +1,103 @@
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.welcome-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 950px;
+  width: 100%;
+  box-shadow: 0 5px 20px rgba(42, 55, 74, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #2a374a;
+  margin-bottom: 15px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+/* BOTONES */
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  border-radius: 10px !important;
+  border: 1px solid #d9d9d9 !important;
+  background-color: #ffffff !important;
+  color: #2a374a !important;
+  transition: all 0.2s ease;
+  padding: 8px 16px;
+}
+
+.action-btn:hover {
+  border-color: #41bbd6 !important;
+  box-shadow: 0 0 0 2px rgba(65, 187, 214, 0.2);
+  color: #41bbd6 !important;
+}
+
+/* TARJETAS */
+.cards {
+  margin-top: 10px;
+}
+
+.card {
+  text-align: center;
+  border-radius: 12px !important;
+  font-size: 0.95rem;
+  color: #4b5563;
+  transition: all 0.25s ease;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(65, 187, 214, 0.25);
+}
+
+.card span[nz-icon] {
+  font-size: 28px;
+  color: #41bbd6;
+  margin-bottom: 10px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .welcome-card {
+    padding: 25px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

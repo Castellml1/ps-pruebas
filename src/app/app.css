@@ -1,0 +1,24 @@
+:host ::ng-deep nz-layout {
+  min-height: 100vh;
+}
+
+:host ::ng-deep nz-header {
+  background: #fff;
+  padding: 0 4px;
+  box-shadow: 0 1px 8px #fff;
+}
+
+:host ::ng-deep nz-content {
+  background: #fff;
+}
+
+:host ::ng-deep nz-footer {
+  text-align: center;
+  background: #fff;
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 13px;
+  padding: 0;
+}

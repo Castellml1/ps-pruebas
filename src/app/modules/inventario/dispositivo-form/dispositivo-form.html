@@ -1,0 +1,267 @@
+<div class="container">
+  <div class="container-form">
+    <!-- Spinner mientras carga o guarda -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin
+        nzSimple
+        nzSize="large"
+        [nzTip]="modo === 'editar' ? 'Cargando dispositivo...' : 'Guardando dispositivo...'"
+      ></nz-spin>
+    </div>
+    }
+
+    <div class="wizard-sidebar">
+      <h4>{{ modo === 'editar' ? 'Editar' : 'Registro' }}</h4>
+      <div class="wizard-step active">
+        <div class="step-icon">1</div>
+        <span>Dispositivo Tecnológico</span>
+      </div>
+    </div>
+
+    <div class="wizard-separator"><div class="separator-line"></div></div>
+
+    <div class="wizard-content">
+      <form
+        [formGroup]="inventarioForm"
+        (ngSubmit)="guardarInventario()"
+        nz-form
+        nzLayout="vertical"
+        class="form-content"
+      >
+        <div class="form-section">
+          <h1>Datos del Dispositivo</h1>
+
+          <div class="form-grid">
+            <!-- Tipo de dispositivo -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>
+                  Tipo<span class="requerido">*</span>
+                </nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('id_tipo')"
+                >
+                  <nz-select
+                    formControlName="id_tipo"
+                    nzPlaceHolder="Selecciona un tipo"
+                    [nzOptions]="tiposDispositivoOptions"
+                  ></nz-select>
+                  @for (error of getFieldErrors('id_tipo'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Marca -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>
+                  Marca<span class="requerido">*</span>
+                </nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('marca')"
+                >
+                  <input
+                    nz-input
+                    formControlName="marca"
+                    placeholder="Ingresa la marca"
+                    maxlength="50"
+                  />
+                  @for (error of getFieldErrors('marca'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Modelo -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>
+                  Modelo<span class="requerido">*</span>
+                </nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('modelo')"
+                >
+                  <input
+                    nz-input
+                    formControlName="modelo"
+                    placeholder="Ingresa el modelo"
+                    maxlength="50"
+                  />
+                  @for (error of getFieldErrors('modelo'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Número de serie -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>No. de Serie</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('numSerie')"
+                >
+                  <input
+                    nz-input
+                    formControlName="numSerie"
+                    placeholder="8-20 caracteres alfanuméricos"
+                    minlength="8"
+                    maxlength="20"
+                  />
+                  @for (error of getFieldErrors('numSerie'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- IMEI -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>IMEI</nz-form-label>
+                <nz-form-control [nzValidateStatus]="getValidateStatus('imei')">
+                  <input
+                    nz-input
+                    type="tel"
+                    formControlName="imei"
+                    placeholder="15 dígitos"
+                    maxlength="15"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of getFieldErrors('imei'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Proveedor -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Proveedor</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('proveedor')"
+                >
+                  <input
+                    nz-input
+                    formControlName="proveedor"
+                    placeholder="Ingresa el proveedor"
+                    maxlength="100"
+                  />
+                  @for (error of getFieldErrors('proveedor'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Fecha de Compra -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Fecha de Compra</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('fechaCompra')"
+                >
+                  <nz-date-picker
+                    formControlName="fechaCompra"
+                    nzPlaceHolder="Selecciona la fecha"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                  @for (error of getFieldErrors('fechaCompra'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Fecha de Término de Garantía -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Término de Garantía</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('fechaTerminoGarantia')"
+                >
+                  <nz-date-picker
+                    formControlName="fechaTerminoGarantia"
+                    nzPlaceHolder="Selecciona la fecha"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                  @for (error of getFieldErrors('fechaTerminoGarantia'); track
+                  error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Asignar a empleado -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Asignar a</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('idEmpleado')"
+                >
+                  <nz-select
+                    formControlName="idEmpleado"
+                    nzPlaceHolder="Selecciona un empleado"
+                    [nzOptions]="empleadosOptions"
+                  ></nz-select>
+                  @for (error of getFieldErrors('idEmpleado'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Comentarios -->
+          <div class="full-width-section">
+            <nz-form-item>
+              <nz-form-label>Comentarios</nz-form-label>
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('comentarios')"
+              >
+                <textarea
+                  nz-input
+                  formControlName="comentarios"
+                  rows="2"
+                  maxlength="500"
+                  placeholder="Ingresa comentarios adicionales (máximo 500 caracteres)"
+                  style="resize: vertical"
+                ></textarea>
+                @for (error of getFieldErrors('comentarios'); track error) {
+                <div class="ant-form-item-explain-error">{{ error }}</div>
+                }
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Botones Guardar / Cancelar -->
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              htmlType="submit"
+            >
+              {{ modo === 'editar' ? 'Actualizar' : 'Guardar' }}
+            </button>
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

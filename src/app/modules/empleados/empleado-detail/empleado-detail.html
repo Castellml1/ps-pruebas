@@ -1,0 +1,150 @@
+<div class="container">
+  <div class="container-form">
+    <div class="wizard-sidebar">
+      <h4>Consulta</h4>
+
+      <div class="wizard-step active">
+        <div class="step-icon">1</div>
+        <span>Datos generales</span>
+      </div>
+    </div>
+
+    <div class="wizard-separator">
+      <div class="separator-line"></div>
+    </div>
+
+    <!-- Spinner que se muestra mientras cargan los datos -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    }
+
+    <div class="wizard-content">
+      <form
+        nz-form
+        [formGroup]="empleadoForm"
+        class="form-content"
+        nzLayout="vertical"
+      >
+        <div class="form-section">
+          <h1>Datos del Empleado</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Número empleado</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="id" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <div class="form-grid">
+            <!-- Nombre -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Nombre</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="nombre" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Primer Apellido -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Primer Apellido</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="primerApellido" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Segundo Apellido -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Segundo Apellido</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="segundoApellido" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Cargo -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Cargo</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="cargo" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Teléfono Personal -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono Personal</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="telefonoPersonal" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Teléfono Oficina -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono Oficina</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="telefonoOficina" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Correo Electrónico -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Correo Electrónico</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="correoElectronico"
+                    readonly
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Fecha de Inicio -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Fecha de Inicio</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    readonly
+                    formControlName="fechaInicio"
+                    nzPlaceHolder="Selecciona la fecha de inicio"
+                    [nzFormat]="'dd/MM/yyyy'"
+                    nzDisabled
+                  >
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <!-- Botón Guardar -->
+          <div class="btn-container">
+            <button
+              nz-button
+              nzType="default"
+              type="button"
+              class="btn-style"
+              (click)="regresar()"
+            >
+              Regresar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,112 @@
+<nz-sider nzCollapsible [nzCollapsed]="isCollapsed" [nzTrigger]="null">
+  <div class="logo">
+    <img
+      [style.display]="isCollapsed ? 'none' : 'block'"
+      [style.opacity]="isCollapsed ? 0 : 1"
+      src="assets/images/logo-largo.png"
+      alt="Logo largo"
+      class="logo-large"
+    />
+    <img
+      [style.display]="!isCollapsed ? 'none' : 'block'"
+      [style.opacity]="!isCollapsed ? 0 : 1"
+      src="assets/images/logo-pequeño.png"
+      alt="Logo pequeño"
+      class="logo-small"
+    />
+  </div>
+  <ul nz-menu nzTheme="dark" nzMode="inline">
+    <li nz-menu-item>
+      <a [routerLink]="['/inicio']">
+        <span nz-icon nzType="home"></span>
+        <span>Inicio</span>
+      </a>
+    </li>
+
+    <!-- Usuarios con estos roles podrán ver el menú desplegable con la opción Consultar clientes -->
+    @if (hasAnyRole(keycloakService, ROLE_GROUPS.CLIENTES) ||
+    hasAnyRole(keycloakService, ROLE_GROUPS.CLIENTES_READ_UPDATE ) ||
+    hasAnyRole(keycloakService, ROLE_GROUPS.CLIENTES_READ)) {
+    <li nz-submenu nzTitle="Clientes" nzIcon="team">
+      <ul>
+        <!-- Usuarios con estos roles podrán ver el menú desplegable junto con esta opción-->
+        @if (hasAnyRole(keycloakService, ROLE_GROUPS.CLIENTES)) {
+        <li nz-menu-item>
+          <a [routerLink]="['/cliente/registrar']">
+            <span>Agregar cliente</span>
+          </a>
+        </li>
+        }
+        <!-- Opción consultar clientes-->
+        <li nz-menu-item>
+          <a [routerLink]="['/cliente/consultar']">
+            <span>Consultar clientes</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    } @if (hasAnyRole(keycloakService, ROLE_GROUPS.INVENTARIO) ||
+    hasAnyRole(keycloakService, ROLE_GROUPS.INVENTARIO_READ)) {
+    <li nz-submenu nzTitle="Inventario" nzIcon="schedule">
+      <ul>
+        @if (hasAnyRole(keycloakService, ROLE_GROUPS.INVENTARIO)) {
+        <li nz-menu-item>
+          <a [routerLink]="['/inventario/agregar-dispositivo']">
+            <span>Agregar dispositivo</span>
+          </a>
+        </li>
+        }
+        <li nz-menu-item>
+          <a [routerLink]="['/inventario/consultar-dispositivos']">
+            <span>Consultar dispositivos</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    } @if (hasAnyRole(keycloakService, ROLE_GROUPS.EMPLEADOS)) {
+    <li nz-submenu nzTitle="Recursos Humanos" nzIcon="team">
+      <ul>
+        <li nz-menu-item>
+          <a [routerLink]="['empleado/registrar']">
+            <span>Registrar empleado</span>
+          </a>
+        </li>
+        <li nz-menu-item>
+          <a [routerLink]="['empleado/consultar']">
+            <span>Consultar empleados</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    } @if(hasAnyRole(keycloakService, ROLE_GROUPS.ADMIN)){
+    <li nz-submenu nzTitle="Usuarios" nzIcon="team">
+      <ul>
+        <li nz-menu-item>
+          <a [routerLink]="['usuario/registrar']">
+            <span>Registrar usuario</span>
+          </a>
+        </li>
+        <li nz-menu-item>
+          <a [routerLink]="['usuario/consultar']">
+            <span>Consultar usuarios</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li nz-submenu nzTitle="Roles" nzIcon="security-scan">
+      <ul>
+        <li nz-menu-item>
+          <a [routerLink]="['rol/registrar']">
+            <span>Registrar rol</span>
+          </a>
+        </li>
+        <li nz-menu-item>
+          <a [routerLink]="['rol/consultar']">
+            <span>Consultar roles</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    }
+  </ul>
+</nz-sider>

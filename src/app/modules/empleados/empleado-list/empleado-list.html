@@ -1,0 +1,162 @@
+<div class="container">
+  @if (showSuccessAlert) {
+  <div class="alert-fixed">
+    <nz-alert
+      nzType="success"
+      nzMessage="Empleado guardado correctamente"
+      nzShowIcon
+    ></nz-alert>
+  </div>
+  }
+
+  <div class="container-list">
+    <div class="header-section">
+      <h1>Empleados</h1>
+      <button
+        class="btn-style"
+        nz-button
+        nzType="primary"
+        (click)="onAgregar()"
+      >
+        Agregar
+      </button>
+    </div>
+
+    <!-- Spinner que se muestra mientras cargan los datos -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    } @if (!isLoading) {
+    <div class="responsive-table">
+      <nz-table
+        #employeeTable
+        [nzData]="listOfDisplayData"
+        [nzBordered]="false"
+        [nzSize]="'middle'"
+        [nzPageSize]="10"
+        [nzShowSizeChanger]="true"
+        [nzPageSizeOptions]="[5, 10, 20, 50]"
+        [nzShowPagination]="true"
+        [nzNoResult]="customEmpty"
+      >
+        <thead>
+          <tr class="cabecera-tabla">
+            <th nzCustomFilter  style="width: 180px">
+              Número empleado
+              <nz-filter-trigger
+                [(nzVisible)]="visibleId"
+                [nzActive]="searchValueId.length > 0"
+                [nzDropdownMenu]="menuId"
+              >
+                <span nz-icon nzType="search"></span>
+              </nz-filter-trigger>
+            </th>
+            <th nzCustomFilter [nzSortFn]="compareNombre" [nzSortPriority]="3">
+              Nombre Completo
+              <nz-filter-trigger
+                [(nzVisible)]="visibleNombre"
+                [nzActive]="searchValueNombre.length > 0"
+                [nzDropdownMenu]="menuNombre"
+              >
+                <span nz-icon nzType="search"></span>
+              </nz-filter-trigger>
+            </th>
+
+            <th>Cargo</th>
+
+            <th>Teléfono Personal</th>
+            <th>Correo Electrónico</th>
+
+            <th [nzSortFn]="compareFechaInicio" [nzSortPriority]="1">
+              Fecha Inicio
+            </th>
+
+            <th style="width: 100px">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (empleado of employeeTable.data; track empleado) {
+          <tr>
+            <td>{{ empleado?.id ?? '' }}</td>
+            <td>
+              {{ empleado?.nombre }} {{ empleado?.primerApellido }} {{
+              empleado?.segundoApellido }}
+            </td>
+            <td>{{ empleado?.cargo ?? '' }}</td>
+            <td>{{ empleado?.telefonoPersonal ?? '' | phone}}</td>
+            <td>{{ empleado?.correoElectronico || '' }}</td>
+            <td>
+              {{ empleado?.fechaInicio ? (empleado.fechaInicio |
+              date:'dd/MM/yyyy') : '' }}
+            </td>
+            <td>
+              <div class="btn-containerTablas">
+                <button
+                  class="icon-ver"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  (click)="onVer(empleado)"
+                  title="Ver"
+                >
+                  <span nz-icon nzType="eye"></span>
+                </button>
+                <button
+                  class="icon-editar"
+                  nz-button
+                  nzType="link"
+                  nzSize="small"
+                  (click)="onEditar(empleado)"
+                  title="Editar"
+                >
+                  <span nz-icon nzType="edit"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+
+      <ng-template #customEmpty>
+        <nz-empty
+          nzNotFoundImage="simple"
+          nzNotFoundContent="No se lograron encontrar empleados"
+        >
+        </nz-empty>
+      </ng-template>
+
+      <!-- Dropdown del buscador con búsqueda en tiempo real -->
+      <nz-dropdown-menu #menuNombre="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <input
+              type="text"
+              nz-input
+              placeholder="Buscar por nombre"
+              [(ngModel)]="searchValueNombre"
+              (ngModelChange)="onSearch()"
+            />
+          </div>
+        </div>
+      </nz-dropdown-menu>
+
+      <!-- Dropdown del buscador para Número de Empleado -->
+      <nz-dropdown-menu #menuId="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <input
+              type="text"
+              nz-input
+              placeholder="Buscar por número"
+              [(ngModel)]="searchValueId"
+              (ngModelChange)="onSearch()"
+            />
+          </div>
+        </div>
+      </nz-dropdown-menu>
+    </div>
+    }
+  </div>
+</div>

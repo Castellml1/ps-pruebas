@@ -1,0 +1,205 @@
+<div class="container">
+  <div class="container-form">
+    <!-- Spinner mientras carga o guarda -->
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin
+        nzSimple
+        nzSize="large"
+        [nzTip]="modo === 'editar' ? 'Cargando empleado...' : 'Guardando empleado...'"
+      ></nz-spin>
+    </div>
+    }
+
+    <div class="wizard-sidebar">
+      <h4>{{ modo === 'agregar' ? 'Registro' : 'Editar' }}</h4>
+      <div class="wizard-step active">
+        <div class="step-icon">1</div>
+        <span>Datos generales</span>
+      </div>
+    </div>
+
+    <div class="wizard-separator"><div class="separator-line"></div></div>
+
+    <div class="wizard-content">
+      <form
+        [formGroup]="userForm"
+        (ngSubmit)="guardarUsuario()"
+        nz-form
+        nzLayout="vertical"
+        class="form-content"
+      >
+        <div class="form-section">
+          <h1>Datos del Usuario</h1>
+          <div class="form-grid">
+            <!-- Correo Electrónico -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Correo Electrónico<span class="requerido"
+                    >*</span
+                  ></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('correoElectronico')"
+                >
+                  <input
+                    nz-input
+                    formControlName="correoElectronico"
+                    placeholder="ejemplo@correo.com"
+                    maxlength="100"
+                  />
+                  @for (error of getFieldErrors('correoElectronico'); track
+                  error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Usuario -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Usuario</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('usuario')"
+                >
+                  <input
+                    nz-input
+                    formControlName="usuario"
+                    maxlength="100"
+                    [attr.readonly]="modo === 'editar' ? true : null"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Nombre -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Nombre<span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('nombre')"
+                >
+                  <input
+                    nz-input
+                    formControlName="nombre"
+                    placeholder="Ingresa el nombre"
+                    maxlength="50"
+                  />
+                  @for (error of getFieldErrors('nombre'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Primer Apellido -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Primer Apellido<span class="requerido"
+                    >*</span
+                  ></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('primerApellido')"
+                >
+                  <input
+                    nz-input
+                    formControlName="primerApellido"
+                    placeholder="Ingresa el primer apellido"
+                    maxlength="50"
+                  />
+                  @for (error of getFieldErrors('primerApellido'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Segundo Apellido -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Segundo Apellido</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('segundoApellido')"
+                >
+                  <input
+                    nz-input
+                    formControlName="segundoApellido"
+                    placeholder="Ingresa el segundo apellido"
+                    maxlength="50"
+                  />
+                  @for (error of getFieldErrors('segundoApellido'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>
+                  Contraseña @if (modo === 'agregar') {
+                  <span class="requerido">*</span>
+                  }
+                </nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('contraseña')"
+                >
+                  <div style="position: relative">
+                    <input
+                      nz-input
+                      placeholder="{{ modo === 'agregar' ? 'Usa mayúsculas, minúsculas y un símbolo (8-20)' : 'Si no hay cambios, dejar en blanco' }}"
+                      formControlName="contraseña"
+                      [type]="passwordVisible ? 'text' : 'password'"
+                      maxlength="20"
+                      minlength="8"
+                      style="padding-right: 35px"
+                    />
+                    <span
+                      nz-icon
+                      [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                      (click)="passwordVisible = !passwordVisible"
+                      class="password"
+                    ></span>
+                  </div>
+                  @for (error of getFieldErrors('contraseña'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Botones Guardar / Cancelar -->
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              htmlType="submit"
+            >
+              {{ modo === 'editar' ? 'Actualizar' : 'Guardar' }}
+            </button>
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

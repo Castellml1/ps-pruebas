@@ -1,0 +1,1337 @@
+<div class="container">
+  <div class="container-form">
+    @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+    </div>
+    }
+
+    <!-- Sidebar con pasos filtrados según el tipo de persona -->
+    <div class="wizard-sidebar">
+      <h4>Registro de Cliente</h4>
+      @for (step of stepsHabilitados; track step; let i = $index) {
+      <div
+        class="wizard-step"
+        [class.active]="currentStep === i"
+        [class.disabled]="!isStepEnabled(i) || (i > 0 && !step1Guardado)"
+        (click)="showStep(i)"
+      >
+        <div class="step-icon">{{ i + 1 }}</div>
+        <span>{{ step }}</span>
+      </div>
+      }
+    </div>
+
+    <div class="wizard-separator">
+      <div class="separator-line"></div>
+    </div>
+
+    <div class="wizard-content">
+      <form [formGroup]="formularioCliente" nz-form nzLayout="vertical">
+        <!-- Paso 1 - Información Personal -->
+        @if (currentStep === 0) {
+        <div class="form-section">
+          <h1>Información Personal</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Número cliente</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="id" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Tipo <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control [nzValidateStatus]="getValidateStatus('tipo')">
+                  <nz-select
+                    formControlName="tipo"
+                    nzPlaceHolder="Selecciona un tipo"
+                  >
+                    @for (t of tipoCliente; track t) {
+                    <nz-option [nzValue]="t.id" [nzLabel]="t.tipo_cliente">
+                    </nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Giro <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('idGiro')"
+                >
+                  <nz-select
+                    formControlName="idGiro"
+                    nzPlaceHolder="Selecciona un giro"
+                  >
+                    @for (error of getFieldErrors('idGiro'); track error) {
+                    <div class="ant-form-item-explain-error">{{ error }}</div>
+                    } @for (t of catalogoGiros; track t) {
+                    <nz-option [nzValue]="t.id" [nzLabel]="t.giro"></nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- Nombre (solo Persona Física) -->
+            @if (!esEmpresa) {
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>
+                  Nombre <span class="requerido">*</span>
+                </nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('nombre')"
+                >
+                  <input
+                    nz-input
+                    formControlName="nombre"
+                    maxlength="50"
+                    placeholder="Ingresa el nombre"
+                  />
+                  @for (error of getFieldErrors('nombre'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Primer Apellido -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>
+                  Primer Apellido <span class="requerido">*</span>
+                </nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('primerApellido')"
+                >
+                  <input
+                    nz-input
+                    formControlName="primerApellido"
+                    maxlength="50"
+                    placeholder="Ingresa el primer apellido"
+                  />
+                  @for (error of getFieldErrors('primerApellido'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Segundo Apellido -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Segundo Apellido</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('segundoApellido')"
+                >
+                  <input
+                    nz-input
+                    formControlName="segundoApellido"
+                    maxlength="50"
+                    placeholder="Ingresa el segundo apellido"
+                  />
+                  @for (error of getFieldErrors('segundoApellido'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            } @if (esEmpresa) {
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Nombre Comercial<span class="requerido"
+                    >*</span
+                  ></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('nombreComercial')"
+                >
+                  <input
+                    nz-input
+                    formControlName="nombreComercial"
+                    maxlength="100"
+                    placeholder="Nombre comercial"
+                  />
+                  @for (error of getFieldErrors('nombreComercial'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            } @if (esEmpresa) {
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Razón Social<span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('razonSocial')"
+                >
+                  <input
+                    nz-input
+                    formControlName="razonSocial"
+                    maxlength="100"
+                    placeholder="Razón social"
+                  />
+                  @for (error of getFieldErrors('razonSocial'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            }
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >RFC <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control [nzValidateStatus]="getValidateStatus('rfc')">
+                  <input
+                    nz-input
+                    formControlName="rfc"
+                    maxlength="13"
+                    placeholder="Ingresa el RFC"
+                  />
+                  @for (error of getFieldErrors('rfc'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <!-- Botón para guardar Step 1 -->
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              type="button"
+              (click)="guardarCliente()"
+            >
+              {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+            </button>
+            @if (isEditMode) {
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+            }
+          </div>
+        </div>
+
+        }
+
+        <!-- Paso 2 - Contacto -->
+        @if (currentStep === 1) {
+        <div class="form-section">
+          <h1>Datos de Contacto</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Nombre <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('nombreContacto')"
+                >
+                  <input
+                    nz-input
+                    formControlName="nombreContacto"
+                    maxlength="50"
+                    placeholder="Nombre del contacto"
+                  />
+                  @for (error of getFieldErrors('nombreContacto'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Apellidos <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('apellidosContacto')"
+                >
+                  <input
+                    nz-input
+                    formControlName="apellidosContacto"
+                    maxlength="100"
+                    placeholder="Apellidos del contacto"
+                  />
+                  @for (error of getFieldErrors('apellidosContacto'); track
+                  error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Teléfono <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('telefonoContacto')"
+                >
+                  <input
+                    nz-input
+                    formControlName="telefonoContacto"
+                    maxlength="10"
+                    placeholder="Teléfono"
+                    type="tel"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of getFieldErrors('telefonoContacto'); track
+                  error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono Adicional</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('telefonoAdicionalContacto')"
+                >
+                  <input
+                    nz-input
+                    formControlName="telefonoAdicionalContacto"
+                    maxlength="10"
+                    placeholder="Teléfono adicional"
+                    type="tel"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of getFieldErrors('telefonoAdicionalContacto');
+                  track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Correo Electrónico<span class="requerido"
+                    >*</span
+                  ></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('correoContacto')"
+                >
+                  <input
+                    nz-input
+                    formControlName="correoContacto"
+                    maxlength="100"
+                    placeholder="correo@ejemplo.com"
+                  />
+                  @for (error of getFieldErrors('correoContacto'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              type="button"
+              (click)="guardarContacto()"
+              [disabled]="isContactoGuardado && !isEditModeContacto"
+            >
+              {{ isEditModeContacto ? 'Actualizar' : 'Guardar' }}
+            </button>
+            @if (isEditMode) {
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- Paso 3 - Domicilio -->
+        @if (currentStep === 2) {
+        <div class="form-section">
+          <h1>Domicilio</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Calle y Número
+                  <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('calleNumero')"
+                >
+                  <input
+                    nz-input
+                    formControlName="calleNumero"
+                    maxlength="100"
+                    placeholder="Calle y número"
+                  />
+                  @for (error of getFieldErrors('calleNumero'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Código Postal <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('codigoPostal')"
+                >
+                  <input
+                    nz-input
+                    formControlName="codigoPostal"
+                    placeholder="Código Postal"
+                    maxlength="5"
+                    type="tel"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of getFieldErrors('codigoPostal'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Colonia <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('colonia')"
+                >
+                  <input
+                    nz-input
+                    formControlName="colonia"
+                    maxlength="100"
+                    placeholder="Colonia"
+                  />
+                  @for (error of getFieldErrors('colonia'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Entidad Federativa
+                  <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('entidadFederativa')"
+                >
+                  <!-- Entidad Federativa -->
+                  <nz-select
+                    formControlName="entidadFederativa"
+                    (nzOnSearch)="onEntidadSearch($event)"
+                    nzPlaceHolder="Buscar entidad federativa"
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                  >
+                    @if (!loadingEntidades) { @for (e of entidadesFiltradas;
+                    track e) {
+                    <nz-option
+                      [nzValue]="e.clave"
+                      [nzLabel]="e.entidadFederativa"
+                    >
+                    </nz-option>
+                    } } @else {
+                    <nz-option nzDisabled nzCustomContent>
+                      <nz-icon nzType="loading" class="loading-icon" />
+                      Cargando entidades...
+                    </nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Municipio <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('municipio')"
+                >
+                  <nz-select
+                    formControlName="municipio"
+                    (nzOnSearch)="onMunicipioSearch($event)"
+                    nzPlaceHolder="Buscar municipio"
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                  >
+                    @for (error of getFieldErrors('municipio'); track error) {
+                    <div class="ant-form-item-explain-error">{{ error }}</div>
+                    } @if (!loadingMunicipios) { @for (m of municipiosFiltrados;
+                    track m) {
+                    <nz-option [nzValue]="m.id" [nzLabel]="m.municipio">
+                    </nz-option>
+                    } } @else {
+                    <nz-option nzDisabled nzCustomContent>
+                      <nz-icon nzType="loading" class="loading-icon" />
+                      Cargando municipios...
+                    </nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              type="button"
+              (click)="guardarDomicilio()"
+              [disabled]="isDomicilioGuardado && !isEditModeDomicilio"
+            >
+              {{ isEditModeDomicilio ? 'Actualizar' : 'Guardar' }}
+            </button>
+            @if (isEditMode) {
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- Paso 4 - Domicilio Fiscal -->
+        @if (currentStep === 3) {
+        <div class="form-section">
+          <h1>Domicilio Fiscal</h1>
+          <div class="form-grid">
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Calle y Número
+                  <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('calleNumero')"
+                >
+                  <input
+                    nz-input
+                    formControlName="calleNumeroFiscal"
+                    maxlength="100"
+                    placeholder="Calle y número"
+                  />
+                  @for (error of getFieldErrors('calleNumero'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Código Postal <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('codigoPostalFiscal')"
+                >
+                  <input
+                    nz-input
+                    formControlName="codigoPostalFiscal"
+                    placeholder="Código Postal"
+                    maxlength="5"
+                    type="tel"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of getFieldErrors('codigoPostalFiscal'); track
+                  error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Colonia <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('colonia')"
+                >
+                  <input
+                    nz-input
+                    formControlName="coloniaFiscal"
+                    maxlength="100"
+                    placeholder="Colonia"
+                  />
+                  @for (error of getFieldErrors('coloniaFiscal'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Entidad Federativa
+                  <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('entidadFederativa')"
+                >
+                  <!-- Entidad Federativa -->
+                  <nz-select
+                    formControlName="entidadFederativaFiscal"
+                    (nzOnSearch)="onEntidadSearch($event)"
+                    nzPlaceHolder="Buscar entidad federativa"
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                  >
+                    @if (!loadingEntidades) { @for (e of entidadesFiltradas;
+                    track e) {
+                    <nz-option
+                      [nzValue]="e.clave"
+                      [nzLabel]="e.entidadFederativa"
+                    >
+                    </nz-option>
+                    } } @else {
+                    <nz-option nzDisabled nzCustomContent>
+                      <nz-icon nzType="loading" class="loading-icon" />
+                      Cargando entidades...
+                    </nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Municipio <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('municipio')"
+                >
+                  <nz-select
+                    formControlName="municipioFiscal"
+                    (nzOnSearch)="onMunicipioFiscalSearch($event)"
+                    nzPlaceHolder="Buscar municipio"
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                  >
+                    @for (error of getFieldErrors('municipio'); track error) {
+                    <div class="ant-form-item-explain-error">{{ error }}</div>
+                    } @if (!loadingMunicipios) { @for (m of
+                    municipiosFiltradosFiscal; track m) {
+                    <nz-option [nzValue]="m.id" [nzLabel]="m.municipio">
+                    </nz-option>
+                    } } @else {
+                    <nz-option nzDisabled nzCustomContent>
+                      <nz-icon nzType="loading" class="loading-icon" />
+                      Cargando municipios...
+                    </nz-option>
+                    }
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              type="button"
+              (click)="guardarDomicilioFiscal()"
+              [disabled]="isDomicilioFiscalGuardado && !isEditModeDomicilioFiscal"
+            >
+              {{ isEditModeDomicilioFiscal ? 'Actualizar' : 'Guardar' }}
+            </button>
+            @if (isEditMode) {
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- Paso 5 - Representante Legal (Solo para empresas) -->
+        @if (currentStep === 4 && esEmpresa) {
+        <div class="form-section">
+          <h1>Representante Legal</h1>
+          <div class="form-grid">
+            <!-- Nombre Representante -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Nombre <span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('nombreRepresentante')"
+                >
+                  <input
+                    nz-input
+                    formControlName="nombreRepresentante"
+                    maxlength="50"
+                    placeholder="Nombre Representante"
+                  />
+                  @for (error of getFieldErrors('nombreRepresentante'); track
+                  error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Primer Apellido Representante -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Primer Apellido<span class="requerido"
+                    >*</span
+                  ></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('primerApellidoRepresentante')"
+                >
+                  <input
+                    nz-input
+                    formControlName="primerApellidoRepresentante"
+                    maxlength="50"
+                    placeholder="Primer Apellido Representante"
+                  />
+                  @for (error of getFieldErrors('primerApellidoRepresentante');
+                  track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Segundo Apellido Representante -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Segundo Apellido </nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('segundoApellidoRepresentante')"
+                >
+                  <input
+                    nz-input
+                    formControlName="segundoApellidoRepresentante"
+                    maxlength="50"
+                    placeholder="Segundo Apellido Representante"
+                  />
+                  @for (error of getFieldErrors('segundoApellidoRepresentante');
+                  track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Teléfono Móvil Representante -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label
+                  >Teléfono Móvil<span class="requerido">*</span></nz-form-label
+                >
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('telefonoMovilRepresentante')"
+                >
+                  <input
+                    nz-input
+                    formControlName="telefonoMovilRepresentante"
+                    placeholder="Teléfono Móvil Representante"
+                    maxlength="10"
+                    type="tel"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of getFieldErrors('telefonoMovilRepresentante');
+                  track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Teléfono Oficina Representante -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Teléfono Oficina</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('telefonoOficinaRepresentante')"
+                >
+                  <input
+                    nz-input
+                    formControlName="telefonoOficinaRepresentante"
+                    placeholder="Teléfono Oficina Representante"
+                    maxlength="10"
+                    type="tel"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of getFieldErrors('telefonoOficinaRepresentante');
+                  track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Extensión Oficina Representante -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Extensión Oficina</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('extensionOficinaRepresentante')"
+                >
+                  <input
+                    nz-input
+                    formControlName="extensionOficinaRepresentante"
+                    placeholder="Extensión Oficina Representante"
+                    maxlength="10"
+                    type="tel"
+                    (input)="onInput($event)"
+                  />
+                  @for (error of
+                  getFieldErrors('extensionOficinaRepresentante'); track error)
+                  {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Correo Representante -->
+            <div class="form-item">
+              <nz-form-item>
+                <nz-form-label>Correo</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="getValidateStatus('correoRepresentante')"
+                >
+                  <input
+                    nz-input
+                    formControlName="correoRepresentante"
+                    maxlength="100"
+                    placeholder="Correo Representante"
+                  />
+                  @for (error of getFieldErrors('correoRepresentante'); track
+                  error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  }
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div class="btn-container">
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              type="button"
+              (click)="guardarRepresentante()"
+              [disabled]="isRepresentanteGuardado && !isEditModeRepresentante"
+            >
+              {{ isEditModeRepresentante ? 'Actualizar' : 'Guardar' }}
+            </button>
+            @if (isEditMode) {
+            <button
+              class="btn-cancel"
+              nz-button
+              nzType="default"
+              type="button"
+              (click)="cancelar()"
+            >
+              Regresar
+            </button>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- Paso 6 - Sucursal (Solo para empresas) -->
+        @if (currentStep === 5 && esEmpresa) {
+        <div class="form-section" [class.disabled]="!step1Guardado">
+          @if (!agregarSucursal) {
+          <div class="header-section">
+            <h1>Sucursales</h1>
+            <button
+              class="btn-style"
+              nz-button
+              nzType="primary"
+              (click)="mostrarFormularioSucursal()"
+            >
+              Agregar
+            </button>
+          </div>
+          } @else {
+          <h1>
+            {{ isEditModeSucursal ? 'Editar Sucursal' : 'Agregar Sucursal' }}
+          </h1>
+          }
+          <!-- Cierre de @if (!agregarSucursal) -->
+        </div>
+
+        <!-- Tabla de sucursales existentes -->
+        @if (!agregarSucursal) {
+        <div class="responsive-table" style="margin-top: 1rem">
+          <nz-table
+            #sucursalTable
+            [nzData]="listOfDisplayDataSucursales"
+            [nzBordered]="false"
+            [nzSize]="'middle'"
+            [nzPageSize]="pageSizeSucursal"
+            [nzShowSizeChanger]="true"
+            [nzPageSizeOptions]="[5, 10, 20, 50]"
+            [nzTotal]="totalSucursales"
+            [nzShowPagination]="true"
+            (nzPageSizeChange)="onPageSizeChangeSucursal($event)"
+            (nzPageIndexChange)="onPageIndexChangeSucursal($event)"
+            [nzNoResult]="customEmptySucursal"
+          >
+            <thead>
+              <tr class="cabecera-tabla">
+                <th
+                  nzCustomFilter
+                  [nzSortFn]="compareSucursalNombre"
+                  [nzSortPriority]="1"
+                >
+                  Nombre
+                  <nz-filter-trigger
+                    [(nzVisible)]="visibleSucursal"
+                    [nzActive]="searchValueSucursal.length > 0"
+                    [nzDropdownMenu]="menuSucursal"
+                  >
+                    <span nz-icon nzType="search"></span>
+                  </nz-filter-trigger>
+                </th>
+                <th nzCustomFilter>
+                  Calle
+                  <nz-filter-trigger
+                    [(nzVisible)]="visibleSucursalCalle"
+                    [nzActive]="searchValueSucursalCalle.length > 0"
+                    [nzDropdownMenu]="menuSucursalCalle"
+                  >
+                    <span nz-icon nzType="search"></span>
+                  </nz-filter-trigger>
+                </th>
+                <th>Colonia</th>
+                <th>Municipio</th>
+                <th>Entidad</th>
+                <th>CP</th>
+                <th nzCustomFilter>
+                  Encargado
+                  <nz-filter-trigger
+                    [(nzVisible)]="visibleSucursalEncargado"
+                    [nzActive]="searchValueSucursalEncargado.length > 0"
+                    [nzDropdownMenu]="menuSucursalEncargado"
+                  >
+                    <span nz-icon nzType="search"></span>
+                  </nz-filter-trigger>
+                </th>
+                <th nzCustomFilter>
+                  Teléfono
+                  <nz-filter-trigger
+                    [(nzVisible)]="visibleSucursalTelefono"
+                    [nzActive]="searchValueSucursalTelefono.length > 0"
+                    [nzDropdownMenu]="menuSucursalTelefono"
+                  >
+                    <span nz-icon nzType="search"></span>
+                  </nz-filter-trigger>
+                </th>
+                <th style="width: 100px">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (sucursal of sucursalTable.data; track sucursal) {
+              <tr>
+                <td>{{ sucursal.nombreSucursal }}</td>
+                <td>{{ sucursal.calleSucursal }}</td>
+                <td>{{ sucursal.coloniaSucursal || '' }}</td>
+                <td>{{ sucursal.municipioSucursal }}</td>
+                <td>{{ sucursal.entidadFederativaSucursal }}</td>
+                <td>{{ sucursal.codigoPostalSucursal }}</td>
+                <td>{{ sucursal.personaEncargadaSucursal }}</td>
+                <td>{{ sucursal.telefonoSucursal | phone }}</td>
+                <td>
+                  <div
+                    class="btn-containerTablas"
+                    style="display: flex; justify-content: center"
+                  >
+                    <button
+                      class="icon-editar"
+                      nz-button
+                      nzType="link"
+                      nzSize="small"
+                      (click)="onEditarSucursal(sucursal)"
+                      title="Editar"
+                    >
+                      <span nz-icon nzType="edit"></span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </nz-table>
+
+          <!-- Template para tabla vacía -->
+          <ng-template #customEmptySucursal>
+            <nz-empty
+              nzNotFoundImage="simple"
+              nzNotFoundContent="No se encontraron sucursales"
+            ></nz-empty>
+          </ng-template>
+
+          <!-- Dropdown del buscador para nombre de sucursal -->
+          <nz-dropdown-menu #menuSucursal="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Buscar por nombre"
+                  [value]="searchValueSucursal"
+                  (input)="onSearchInputSucursal($event)"
+                />
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <!-- Dropdown del buscador para calle -->
+          <nz-dropdown-menu #menuSucursalCalle="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Buscar por calle"
+                  [value]="searchValueSucursalCalle"
+                  (input)="onSearchInputSucursalCalle($event)"
+                />
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <!-- Dropdown del buscador para encargado -->
+          <nz-dropdown-menu #menuSucursalEncargado="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Buscar por encargado"
+                  [value]="searchValueSucursalEncargado"
+                  (input)="onSearchInputSucursalEncargado($event)"
+                />
+              </div>
+            </div>
+          </nz-dropdown-menu>
+
+          <!-- Dropdown del buscador para teléfono -->
+          <nz-dropdown-menu #menuSucursalTelefono="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+              <div class="search-box">
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Buscar por teléfono"
+                  [value]="searchValueSucursalTelefono"
+                  (input)="onSearchInputSucursalTelefono($event)"
+                />
+              </div>
+            </div>
+          </nz-dropdown-menu>
+        </div>
+        <div class="btn-container">
+          <button
+            class="btn-cancel"
+            nz-button
+            nzType="default"
+            type="button"
+            (click)="cancelar()"
+          >
+            Regresar
+          </button>
+        </div>
+        } @if (agregarSucursal) {
+        <div class="form-grid" style="margin-top: 1rem">
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label
+                >Nombre<span class="requerido">*</span></nz-form-label
+              >
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('nombreSucursal')"
+              >
+                <input
+                  nz-input
+                  formControlName="nombreSucursal"
+                  maxlength="100"
+                  placeholder="Nombre de la sucursal"
+                />
+                @for (error of getFieldErrors('nombreSucursal'); track error) {
+                <div class="ant-form-item-explain-error">{{ error }}</div>
+                }
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label
+                >Calle y Número<span class="requerido">*</span></nz-form-label
+              >
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('calleSucursal')"
+              >
+                <input
+                  nz-input
+                  formControlName="calleSucursal"
+                  maxlength="100"
+                  placeholder="Calle y número"
+                />
+                @for (error of getFieldErrors('calleSucursal'); track error) {
+                <div class="ant-form-item-explain-error">{{ error }}</div>
+                }
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label>Colonia</nz-form-label>
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('coloniaSucursal')"
+              >
+                <input
+                  nz-input
+                  formControlName="coloniaSucursal"
+                  maxlength="100"
+                  placeholder="Colonia"
+                />
+                @for (error of getFieldErrors('coloniaSucursal'); track error) {
+                <div class="ant-form-item-explain-error">{{ error }}</div>
+                }
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label
+                >Código Postal<span class="requerido">*</span></nz-form-label
+              >
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('codigoPostalSucursal')"
+              >
+                <input
+                  nz-input
+                  formControlName="codigoPostalSucursal"
+                  placeholder="Código postal"
+                  maxlength="5"
+                  type="tel"
+                  (input)="onInput($event)"
+                />
+                @for (error of getFieldErrors('codigoPostalSucursal'); track
+                error) {
+                <div class="ant-form-item-explain-error">{{ error }}</div>
+                }
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label
+                >Entidad Federativa<span class="requerido"
+                  >*</span
+                ></nz-form-label
+              >
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('entidadFederativaSucursal')"
+              >
+                <nz-select
+                  formControlName="entidadFederativaSucursal"
+                  (nzOnSearch)="onEntidadSucursalSearch($event)"
+                  nzPlaceHolder="Buscar entidad federativa"
+                  nzAllowClear
+                  nzShowSearch
+                  nzServerSearch
+                >
+                  @if (!loadingEntidadesSucursal) { @for (e of
+                  entidadesFiltradas; track e) {
+                  <nz-option
+                    [nzValue]="e.clave"
+                    [nzLabel]="e.entidadFederativa"
+                  >
+                  </nz-option>
+                  } } @else {
+                  <nz-option nzDisabled nzCustomContent>
+                    <nz-icon nzType="loading" class="loading-icon" />
+                    Cargando entidades...
+                  </nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label
+                >Municipio <span class="requerido">*</span></nz-form-label
+              >
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('municipioSucursal')"
+              >
+                <nz-select
+                  formControlName="municipioSucursal"
+                  (nzOnSearch)="onMunicipioSucursalSearch($event)"
+                  nzPlaceHolder="Buscar municipio"
+                  nzAllowClear
+                  nzShowSearch
+                  nzServerSearch
+                >
+                  @for (error of getFieldErrors('municipio'); track error) {
+                  <div class="ant-form-item-explain-error">{{ error }}</div>
+                  } @if (!loadingMunicipiosSucursal) { @for (m of
+                  municipiosFiltradosSucursal; track m) {
+                  <nz-option [nzValue]="m.id" [nzLabel]="m.municipio">
+                  </nz-option>
+                  } } @else {
+                  <nz-option nzDisabled nzCustomContent>
+                    <nz-icon nzType="loading" class="loading-icon" />
+                    Cargando municipios...
+                  </nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label
+                >Persona Encargada<span class="requerido"
+                  >*</span
+                ></nz-form-label
+              >
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('personaEncargadaSucursal')"
+              >
+                <input
+                  nz-input
+                  formControlName="personaEncargadaSucursal"
+                  maxlength="100"
+                  placeholder="Nombre persona encargada"
+                />
+                @for (error of getFieldErrors('personaEncargadaSucursal'); track
+                error) {
+                <div class="ant-form-item-explain-error">{{ error }}</div>
+                }
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div class="form-item">
+            <nz-form-item>
+              <nz-form-label
+                >Teléfono<span class="requerido">*</span></nz-form-label
+              >
+              <nz-form-control
+                [nzValidateStatus]="getValidateStatus('telefonoSucursal')"
+              >
+                <input
+                  nz-input
+                  formControlName="telefonoSucursal"
+                  maxlength="10"
+                  placeholder="Teléfono sucursal"
+                  type="tel"
+                  (input)="onInput($event)"
+                />
+                @for (error of getFieldErrors('telefonoSucursal'); track error)
+                {
+                <div class="ant-form-item-explain-error">{{ error }}</div>
+                }
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="btn-container">
+          <button
+            class="btn-style"
+            nz-button
+            nzType="primary"
+            type="button"
+            (click)="guardarSucursal()"
+          >
+            {{ isEditModeSucursal ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button
+            class="btn-cancel"
+            nz-button
+            nzType="default"
+            (click)="volverATablaSucursales()"
+          >
+            Cancelar
+          </button>
+        </div>
+        } }
+      </form>
+    </div>
+  </div>
+</div>

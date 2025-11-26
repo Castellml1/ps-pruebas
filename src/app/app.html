@@ -1,0 +1,24 @@
+@if (showLayout) {
+  <nz-layout>
+    <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+      <app-sidebar [isCollapsed]="isCollapsed"></app-sidebar>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <app-header
+          [isCollapsed]="isCollapsed"
+          (toggle)="toggleSidebar()"
+        ></app-header>
+      </nz-header>
+      <nz-content style="margin: 2px">
+        <router-outlet></router-outlet>
+      </nz-content>
+      <nz-footer style="text-align: center">
+        <app-footer></app-footer>
+      </nz-footer>
+    </nz-layout>
+  </nz-layout>
+} @else {
+  <router-outlet></router-outlet>
+}
+
